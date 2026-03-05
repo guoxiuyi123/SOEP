@@ -1,62 +1,71 @@
-# An Efficient Network for Small Object Detection via Frequency Domain Modulation and Directionally Decomposed Large Kernels
+# Enhancing Small Object Perception through Synergistic Frequency-Spatial Modulation (SOEP)
 
-**[Preprint]** | **[Paper]** (Link will be updated upon acceptance)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18872450.svg)](https://doi.org/10.5281/zenodo.18872450)
 
-本仓库为论文 **"An Efficient Network for Small Object Detection via Frequency Domain Modulation and Directionally Decomposed Large Kernels"** 的官方代码实现（部分预览）。
-
-目前仅上传了论文核心模块（SOEP）及可视化分析工具的关键代码。**完整的训练框架、预训练权重及所有脚本将在论文正式录用（Accepted）后第一时间在此仓库开源。**
-
-## 📂 核心代码说明 (Code Description)
-
-本仓库当前包含以下核心文件，对应论文中提出的 **SOEP (Spatial-Omni-Enhanced Perception)** 模块及其验证实验：
-
-### 1. `SOEP.py` - 核心模型架构
-这是本论文的核心算法实现文件，包含了 **Spatial-Omni-Enhanced Perception (SOEP)** 模块的完整定义。
-* **主要类 (Classes):**
-    * `FGM` (Frequency-Guided Module): 频域引导模块。利用 FFT/IFFT 进行频谱重校准，并通过跨域门控机制增强高频纹理特征，抑制背景噪声。
-    * `OmniKernel`: 全向大核模块。通过分解的大卷积核（$1\times K$, $K\times 1$, $K\times K$）在保持低计算成本的同时扩展有效感受野（ERF）。
-    * `CSPOmniKernel`: 集成到 CSP 结构中的封装实现，方便接入 DETR 等架构。
-
-### 2. `ERF.py` - 有效感受野可视化 (ERF Visualization)
-用于生成论文中 **有效感受野 (Effective Receptive Field)** 热力图的工具脚本。
-* **功能:** 计算并可视化模型在特定层对于输入图像的梯度响应分布。
-* **对应论文:** 对应论文实验部分关于感受野的分析（如文中 Fig. 4），证明 SOEP 模块能有效扩展模型对小目标的关注范围。
-* **使用方法:**
-    ```python
-    # 需要在代码中指定权重路径和目标层
-    python ERF.py
-    ```
-
-### 3. `frequency.py` - 频域分析与可视化 (Frequency Domain Analysis)
-用于进行频域分析的工具脚本，支持生成频谱图及计算 **HFER (High-Frequency Energy Ratio)** 指标。
-* **功能:**
-    * 对特征图进行 FFT 变换并可视化频谱。
-    * 计算高频能量占比 (HFER)，量化评估 FGM 模块对高频细节的增强效果。
-    * 生成对比图（原图 vs 特征图 vs 频谱图）。
-* **对应论文:** 对应论文方法论部分关于频域重校准的验证（如文中 Fig. 3）。
-* **运行示例:**
-    ```bash
-    python frequency.py --image path/to/img.jpg --npy_original path/to/feat_a.npy --npy_fgm path/to/feat_b.npy
-    ```
+🚨 **Important Note:** This repository contains the official core implementations for the manuscript *"Enhancing Small Object Perception through Synergistic Frequency-Spatial Modulation"*, which is currently submitted to **The Visual Computer**. If you find this code or our work useful in your research, we strongly encourage and kindly request that you cite our relevant manuscript (see the Citation section below).
 
 ---
 
-## 📅 开源计划 (Release Plan)
+## 📖 Introduction
+This repository provides the core, plug-and-play PyTorch implementations of the **Spatial-Omni-Enhanced Perception (SOEP)** module. As detailed in our manuscript, SOEP is designed to augment existing object detection frameworks (such as RT-DETR) to tackle the fundamental challenges of detecting small objects in complex scenes, mitigating feature degradation and background noise via frequency-domain modulation and large-kernel spatial aggregation.
 
-我们承诺在论文被录用后公开以下内容：
-- [ ] 完整的 SOEP 模型训练与推理代码 (Based on RT-DETR/YOLO)。
-- [ ] 在 TinyPerson 和 VisDrone2019-DET 数据集上的复现脚本。
-- [ ] 预训练模型权重 (Pre-trained Weights)。
-- [ ] 完整的配置文件与环境依赖说明。
+## 📂 File Structure & Key Algorithms
+The repository contains the following core files, directly corresponding to the methodologies and evaluations proposed in our paper:
 
-## 🔗 引用 (Citation)
+- `SOEP.py`: Implements the complete **Spatial-Omni-Enhanced Perception (SOEP)** module. This file contains the core PyTorch network structures for both the **Frequency-Guided Module (FGM)** (handling FFT/IFFT spectral recalibration) and the **OmniKernel Module** (handling directionally decomposed large convolutions).
+- `frequency.py`: A utility script designed for frequency domain feature comparison. It is used to analyze the spectral energy distribution, calculate the High-Frequency Energy Ratio (HFER), and generate the frequency-domain visualizations discussed in our manuscript.
+- `ERF.py`: Provides the analytical script to calculate and visualize the Effective Receptive Field (ERF), corroborating the quantitative ERF_20% and ERF_50% analysis presented in our experiments.
 
-如果您觉得本工作对您的研究有帮助，请在论文录用后关注引用更新。
+## ⚙️ Dependencies
+To use these modules, ensure your environment meets the following basic requirements:
+- Python >= 3.8
+- PyTorch >= 1.9.0
+- torchvision
 
-```bibtex
-@article{SOEP2026,
-  title={An Efficient Network for Small Object Detection via Frequency Domain Modulation and Directionally Decomposed Large Kernels},
-  author={Guo, Xiuyi and Liu, Hongbin and Dong, Peng and Zhao, Yongze and Zhou, Yitong and Li, Jilong and Wang, Baoxu and Peng, Wei and Li, Chengdong},
-  journal={Neurocomputing (Under Review)},
-  year={2026}
-}
+## 📊 Datasets Preparation
+If you wish to replicate our experiments, please download the **VisDrone2019-DET** and **TinyPerson** datasets from their official sources. We recommend organizing them in the standard COCO format and placing them in a `datasets/` directory at the root of your detection framework (e.g., adjacent to your RT-DETR project folder):
+
+```text
+datasets/
+├── TinyPerson/
+│   ├── images/
+│   │   ├── train/
+│   │   └── val/
+│   └── annotations/
+│       ├── instances_train.json
+│       └── instances_val.json
+└── VisDrone2019-DET/
+    ├── images/
+    │   ├── train/
+    │   └── val/
+    └── annotations/
+        ├── instances_train.json
+        └── instances_val.json
+```
+
+## 🚀 Usage Guidelines (Integration)
+Because SOEP is designed as a lightweight, plug-and-play component, you can easily integrate it into any existing CNN or Transformer-based backbone (e.g., ResNet, RT-DETR). 
+
+Here is a minimal example of how to import and use the SOEP module in your own PyTorch project:
+
+```python
+import torch
+# Import the core SOEP module from our provided script
+from SOEP import SOEP 
+
+# Example: Initialize the SOEP module 
+# (Adjust the channel dimensions based on your specific backbone stage)
+in_channels = 256
+soep_module = SOEP(in_channels=in_channels)
+
+# Create a dummy input tensor representing a feature map [Batch_size, Channels, Height, Width]
+dummy_input = torch.randn(2, in_channels, 64, 64)
+
+# Pass the feature map through the SOEP module for frequency-spatial enhancement
+enhanced_features = soep_module(dummy_input)
+
+print(f"Input shape: {dummy_input.shape}")
+print(f"Output shape: {enhanced_features.shape}")
+
+
+
