@@ -2,7 +2,7 @@
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18872450.svg)](https://doi.org/10.5281/zenodo.18872450)
 
-🚨 **Important Note:** This repository contains the official core implementations for the manuscript *"Enhancing Small Object Perception through Synergistic Frequency-Spatial Modulation"*, which is currently submitted to **The Visual Computer**. If you find this code or our work useful in your research, we strongly encourage and kindly request that you cite our relevant manuscript (see the Citation section below).
+🚨 **Important Note:** This repository contains the official core implementations for the manuscript *"Enhancing Small Object Perception through Synergistic Frequency-Spatial Modulation"*, which is currently submitted to **Machine Vision and Applications**. If you find this code or our work useful in your research, we strongly encourage and kindly request that you cite our relevant manuscript (see the Citation section below).
 
 ---
 
