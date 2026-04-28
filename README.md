@@ -1,36 +1,40 @@
-# SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery [cite: 1]
+# SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery
 
-[cite_start]Official implementation of the paper **"SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery"**[cite: 1].
+Official implementation of the paper **"SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery"**.
 
 ## 📖 Introduction
-[cite_start]Detecting small objects in high-resolution remote sensing (RS) imagery remains a fundamental challenge because these targets occupy minimal pixels and lack clear textures[cite: 1]. [cite_start]Consequently, they are easily overwhelmed by complex topographical background noise[cite: 1]. [cite_start]We propose **SOEP-DETR**, an RT-DETR-based detector built around the lightweight **Spatial-Omni-Enhanced Perception (SOEP)** module[cite: 1].
+Detecting small objects in high-resolution remote sensing (RS) imagery remains a fundamental challenge because these targets occupy minimal pixels and lack clear textures. Consequently, they are easily overwhelmed by complex topographical background noise. We propose **SOEP-DETR**, an RT-DETR-based detector built around the lightweight **Spatial-Omni-Enhanced Perception (SOEP)** module.
 
 The SOEP module integrates two complementary mechanisms:
-* [cite_start]**Frequency-Guided Module (FGM)**: Recalibrates spectral amplitudes to suppress terrain-induced interference and enhance salient object structures[cite: 1, 5].
-* [cite_start]**OmniKernel Module**: Employs directionally decomposed large convolutions to capture multi-directional context for arbitrarily oriented aerial targets[cite: 1, 5].
+* **Frequency-Guided Module (FGM)**: Recalibrates spectral amplitudes to suppress terrain-induced interference and enhance salient object structures.
+* **OmniKernel Module**: Employs directionally decomposed large convolutions to capture multi-directional context for arbitrarily oriented aerial targets.
 
 ## 📂 Repository Structure
-* [cite_start]`SOEP.py`: Contains the core PyTorch implementations of the **SOEP**, **FGM**, and **OmniKernel** modules[cite: 5].
-* [cite_start]`frequency.py`: A utility script for frequency-domain analysis, including High-Frequency Energy Ratio (HFER) calculation and spectral visualization[cite: 6].
-* [cite_start]`ERF.py`: Provides tools to calculate and visualize the Effective Receptive Field (ERF) to verify the impact of large kernels[cite: 3].
+* `SOEP.py`: Contains the core PyTorch implementations of the **SOEP**, **FGM**, and **OmniKernel** modules.
+* `frequency.py`: A utility script for frequency-domain analysis, including High-Frequency Energy Ratio (HFER) calculation and spectral visualization.
+* `ERF.py`: Provides tools to calculate and visualize the Effective Receptive Field (ERF) to verify the impact of large kernels.
 
-## [cite_start]📊 Experimental Performance [cite: 1]
-[cite_start]SOEP-DETR demonstrates superior performance on two challenging remote sensing benchmarks[cite: 1]:
+## 📊 Datasets Preparation
+Download the **TinyPerson** and **VisDrone2019-DET** datasets from their official GitHub repositories:
+* **[TinyPerson Dataset](https://github.com/w-sugar/TinyBenchmark)** (Official implementation for WACV 2020 "Scale Match for Tiny Person Detection")
+* **[VisDrone2019-DET Dataset](https://github.com/VisDrone/VisDrone-Dataset)** (Official AISKYEYE team repository)
 
-### 1. TinyPerson (Long-distance Surveillance)
-* [cite_start]**Significant Gains**: Achieves relative improvements of **17.86%** in AP and **21.43%** in $AP_{s}$ over the RT-DETR-R18 baseline[cite: 1].
-* [cite_start]**Optimal Kernel**: Reaches peak performance using a kernel size of **K=41**[cite: 1].
-
-### 2. VisDrone2019-DET (UAV Scenarios)
-* [cite_start]**Detection Accuracy**: Attains an AP of **0.221** and an $AP_{s}$ of **0.202**[cite: 1].
-* [cite_start]**Inference Speed**: Maintains a real-time speed of **113.07 FPS**, suitable for resource-constrained UAV deployment[cite: 1].
+We recommend organizing them in the standard COCO format:
+```text
+datasets/
+├── TinyPerson/
+│   ├── images/
+│   └── annotations/
+└── VisDrone2019-DET/
+    ├── images/
+    └── annotations/
+```
 
 ## 🚀 Usage Guidelines
-[cite_start]The SOEP module is designed as a plug-and-play component for integration into existing CNN or Transformer-based backbones[cite: 4].
+The SOEP module is designed as a plug-and-play component for integration into existing CNN or Transformer-based backbones.
 
 ```python
 import torch
-# Import the SOEP module
 from SOEP import SOEP 
 
 # Initialize (adjust channels based on your backbone stage)
@@ -45,7 +49,7 @@ enhanced_features = soep_module(dummy_input)
 ```
 
 ## 📝 Citation
-[cite_start]If you find this work useful in your research, please cite our manuscript[cite: 4]:
+If you find this work useful in your research, please cite our manuscript:
 
 ```bibtex
 @article{guo2026soep,
