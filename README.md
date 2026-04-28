@@ -1,4 +1,4 @@
-# [cite_start]SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery [cite: 1]
+# SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery [cite: 1]
 
 [cite_start]Official implementation of the paper **"SOEP-DETR: Synergistic Frequency-Spatial Modulation for Small Object Detection in Remote Sensing Imagery"**[cite: 1].
 
