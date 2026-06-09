@@ -10,9 +10,10 @@ if __name__ == '__main__':
     model.train(data='dataset/data.yaml',
                 cache=False,
                 imgsz=640,
-                epochs=300,
-                batch=4,
+                epochs=150,
+                batch=8,
                 workers=4,
+                seed=0,
                 # device='0,1',
                 # resume='', # last.pt path
                 project='runs/train',
