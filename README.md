@@ -4,11 +4,9 @@ SOEP-DETR is a frequency-spatial enhanced RT-DETR framework for real-time small 
 
 The code is based on the Ultralytics RT-DETR framework and introduces the proposed Spatial-Omni-Enhanced Perception (SOEP) module into RT-DETR-R18 to improve small object detection under low-resolution, low-contrast, and cluttered-background conditions.
 
-
-
 ## 1. Project Description
 
-Small objects in UAV images usually occupy only a few pixels and are easily affected by background clutter, motion blur, occlusion, scale variation, and low contrast. SOEP-DETR is designed to strengthen small object representation while maintaining real-time inference performance.
+Small objects in UAV and surveillance images usually occupy only a few pixels and are easily affected by background clutter, motion blur, occlusion, scale variation, and low contrast. SOEP-DETR is designed to strengthen small object representation while maintaining real-time inference performance.
 
 The main idea is to combine frequency-domain enhancement and spatial large-kernel context aggregation.
 
@@ -27,7 +25,7 @@ This repository supports experiments on two public small object detection datase
 * **TinyPerson**
 * **VisDrone2019-DET**
 
-The datasets are not included in this repository. Please download them from the official sources and prepare them locally.
+The datasets are not included in this repository. Please download them from their official sources and prepare them locally.
 
 ### 2.1 TinyPerson
 
@@ -35,7 +33,9 @@ TinyPerson is a tiny person detection dataset for long-distance surveillance sce
 
 Official dataset source:
 
-Please refer to [TinyPerson](https://github.com/w-sugar/TinyBenchmark) for TinyPerson dataset.
+```text
+https://github.com/ucas-vg/TinyBenchmark
+```
 
 Dataset configuration file in this repository:
 
@@ -50,7 +50,7 @@ nc: 1
 names: [person]
 ```
 
-If the original annotations contain multiple person-related categories, please merge them into the single `person` category before training.
+If the original annotations contain multiple person-related categories, such as `sea-person` and `earth-person`, please merge them into a single `person` category before training.
 
 ### 2.2 VisDrone2019-DET
 
@@ -58,7 +58,15 @@ VisDrone2019-DET is a UAV-based object detection dataset containing crowded aeri
 
 Official dataset source:
 
-Please refer to [VisDrone](https://github.com/VisDrone/VisDrone-Dataset) for VisDrone2019 dataset.
+```text
+https://github.com/VisDrone/VisDrone-Dataset
+```
+
+Dataset usage and license information:
+
+```text
+https://aiskyeye.com/data-protection/
+```
 
 Dataset configuration file in this repository:
 
@@ -75,7 +83,9 @@ names: [pedestrian, people, bicycle, car, van, truck, tricycle, awning-tricycle,
 
 ### 2.3 Expected Dataset Format
 
-The expected dataset structure is:
+The dataset should be organized in the Ultralytics detection format.
+
+Expected structure:
 
 ```text
 dataset_root/
@@ -89,15 +99,36 @@ dataset_root/
     └── test/
 ```
 
+Each label file should use the normalized YOLO detection format:
+
+```text
+class_id x_center y_center width height
+```
+
+where `x_center`, `y_center`, `width`, and `height` are normalized to `[0, 1]`.
+
 Please modify the `path` field in the corresponding YAML file according to your local dataset location.
 
-Example:
+Example for VisDrone2019-DET:
 
 ```yaml
 path: /path/to/VisDrone2019-DET
 train: images/train
 val: images/val
 test: images/test
+nc: 10
+names: [pedestrian, people, bicycle, car, van, truck, tricycle, awning-tricycle, bus, motor]
+```
+
+Example for TinyPerson:
+
+```yaml
+path: /path/to/TinyPerson
+train: images/train
+val: images/val
+test: images/test
+nc: 1
+names: [person]
 ```
 
 ---
@@ -120,6 +151,8 @@ SOEP/
 ├── val.py
 ├── ERF.py
 ├── frequency.py
+├── requirements.txt
+├── setup.py
 └── README.md
 ```
 
@@ -133,50 +166,71 @@ File descriptions:
 * `val.py`: validation and metric reporting script.
 * `ERF.py`: effective receptive field visualization script.
 * `frequency.py`: frequency-domain visualization script.
+* `requirements.txt`: Python package requirements.
+* `setup.py`: package setup file inherited from the Ultralytics codebase.
 
 ---
 
 ## 4. Requirements
 
-```text
 Recommended environment:
-  Operating system: Ubuntu 20.04 / Windows 10 or later
-  Python: 3.8 or later
-  CUDA: 11.3 or later
-  GPU: NVIDIA GPU is recommended for training and inference
 
-Tested dependency versions:
-  torch == 1.13.1
-  torchvision == 0.14.1
-  numpy == 1.23.5
-  opencv-python == 4.7.0.72
-  matplotlib == 3.7.1
-  pyyaml == 6.0
-  tqdm == 4.65.0
-  pandas == 1.5.3
-  scipy == 1.10.1
-  thop == 0.1.1.post2209072238
-
-Optional package:
-  pycocotools == 2.0.6
+```text
+Operating system: Ubuntu 20.04 / Windows 10 or later
+Python: 3.8 or later
+CUDA: 11.3 or later
+GPU: NVIDIA GPU is recommended for training and inference
 ```
 
-Please install the required packages according to your local Python, CUDA, and PyTorch versions. Different CUDA or PyTorch versions may also work, but the versions listed above are recommended for reproducing the experiments.
+Tested dependency versions:
+
+```text
+torch == 1.13.1
+torchvision == 0.14.1
+numpy == 1.23.5
+opencv-python == 4.7.0.72
+matplotlib == 3.7.1
+pyyaml == 6.0
+tqdm == 4.65.0
+pandas == 1.5.3
+scipy == 1.10.1
+thop == 0.1.1.post2209072238
+```
+
+Optional package:
+
+```text
+pycocotools == 2.0.6
+```
+
+Different CUDA or PyTorch versions may also work, but the versions listed above are recommended for reproducing the experiments.
 
 ---
 
-## 5. Usage Instructions
+## 5. Installation
 
-### 5.1 Clone the Repository
+Clone the repository:
 
 ```bash
 git clone https://github.com/guoxiuyi123/SOEP.git
 cd SOEP
 ```
 
-### 5.2 Prepare the Dataset
+Install dependencies:
 
-Download the dataset from the official source and organize it in YOLO detection format.
+```bash
+pip install -r requirements.txt
+```
+
+If PyTorch is not installed correctly, please install the PyTorch version that matches your CUDA environment first, and then install the remaining dependencies.
+
+---
+
+## 6. Usage Instructions
+
+### 6.1 Prepare the Dataset
+
+Download the datasets from their official sources and organize them in the expected detection format.
 
 Then edit the corresponding YAML file.
 
@@ -203,7 +257,7 @@ nc: 10
 names: [pedestrian, people, bicycle, car, van, truck, tricycle, awning-tricycle, bus, motor]
 ```
 
-### 5.3 Train
+### 6.2 Train
 
 Run:
 
@@ -217,7 +271,13 @@ The default model configuration is:
 ultralytics/cfg/models/rt-detr/rtdetr-r18-soep-p3p4.yaml
 ```
 
-Training results will be saved in:
+The default dataset configuration in `train.py` is:
+
+```text
+dataset/data.yaml
+```
+
+Training outputs will be saved in:
 
 ```text
 runs/train/exp/
@@ -229,7 +289,15 @@ The best model is usually saved as:
 runs/train/exp/weights/best.pt
 ```
 
-### 5.4 Validate
+To train on TinyPerson, modify the `data` argument in `train.py`:
+
+```python
+model.train(data='dataset/tinyperson.yaml', ...)
+```
+
+To reproduce a specific experiment, please make sure that the batch size, epoch number, input size, dataset split, and random seed are consistent with the settings reported in the manuscript.
+
+### 6.3 Validate
 
 Run:
 
@@ -245,7 +313,9 @@ Validation results will be saved in:
 runs/val/exp/
 ```
 
-### 5.5 Inference
+If your checkpoint path is different, modify the checkpoint path in `val.py`.
+
+### 6.4 Inference
 
 Example:
 
@@ -258,31 +328,54 @@ model.predict(source="path/to/images", imgsz=640, conf=0.25, save=True)
 
 ---
 
-## 6. Methodology
+## 7. Methodology
 
 SOEP-DETR is built on RT-DETR-R18. The proposed SOEP module is inserted into the feature extraction pipeline to enhance small object representation.
 
-### 6.1 Frequency-Guided Module
+### 7.1 Frequency-Guided Module
 
-FGM uses frequency-domain feature modulation to enhance weak structural cues such as edges, contours, and local intensity changes. This helps tiny objects remain distinguishable from cluttered backgrounds.
+FGM applies frequency-domain feature modulation to enhance weak structural cues such as edges, contours, and local intensity changes. This helps tiny objects remain distinguishable from cluttered backgrounds.
 
-### 6.2 OmniKernel Module
+### 7.2 OmniKernel Module
 
-OmniKernel uses large-kernel spatial aggregation to enlarge the receptive field and improve contextual perception. It is designed to provide surrounding context for small object localization while keeping the computational cost controlled.
+OmniKernel uses large-kernel spatial aggregation to enlarge the receptive field and improve contextual perception. It provides surrounding context for small object localization while keeping the computational cost controlled.
 
-### 6.3 Integration into RT-DETR
+### 7.3 Integration into RT-DETR
 
-The SOEP module is integrated into the RT-DETR-R18 model configuration. The provided YAML file inserts SOEP into the P3 and P4 feature stages:
+The SOEP module is integrated into RT-DETR-R18 through the following model configuration:
 
 ```text
 ultralytics/cfg/models/rt-detr/rtdetr-r18-soep-p3p4.yaml
 ```
 
-P3 and P4 are selected because they preserve more spatial details and are important for small object detection.
+The provided configuration inserts SOEP into the P3 and P4 feature stages. P3 and P4 are selected because they preserve more spatial details and are important for small object detection.
 
 ---
 
-## 7. Citation
+## 8. Outputs
+
+Typical training outputs:
+
+```text
+runs/train/exp/
+├── weights/
+│   ├── best.pt
+│   └── last.pt
+├── results.csv
+└── results.png
+```
+
+Typical validation outputs:
+
+```text
+runs/val/exp/
+```
+
+Generated experiment outputs, model weights, and dataset files are not required to be committed to the repository.
+
+---
+
+## 9. Citation
 
 If you use this code in your research, please cite:
 
@@ -299,10 +392,12 @@ Please also cite the original RT-DETR, TinyPerson, and VisDrone papers if their 
 
 ---
 
-## 8. License and Contribution
+## 10. License and Contribution
 
-This repository is released for academic research and reproducibility.
+This repository is based on the Ultralytics codebase and follows the license terms of the original framework. The current setup file specifies the AGPL-3.0 license.
 
-Please follow the licenses of the original third-party codebases and datasets. If an explicit license file is added later, the repository license should be updated accordingly.
+Please also follow the license and usage terms of the third-party datasets used in this study.
 
-Contributions are welcome. You may submit issues or pull requests for bug fixes, documentation improvements, dataset preparation scripts, or additional experimental support.
+Contributions are welcome through issues and pull requests. Contributions may include bug fixes, documentation improvements, dataset preparation scripts, and additional experimental support.
+
+Please do not upload original datasets, large trained weights, or generated experiment folders directly to this repository.
