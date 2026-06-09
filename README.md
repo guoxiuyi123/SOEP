@@ -35,9 +35,7 @@ TinyPerson is a tiny person detection dataset for long-distance surveillance sce
 
 Official dataset source:
 
-```text
-https://github.com/w-sugar/TinyBenchmark
-```
+Please refer to [TinyPerson](https://github.com/w-sugar/TinyBenchmark) for TinyPerson dataset.
 
 Dataset configuration file in this repository:
 
@@ -60,9 +58,7 @@ VisDrone2019-DET is a UAV-based object detection dataset containing crowded aeri
 
 Official dataset source:
 
-```text
-https://github.com/VisDrone/VisDrone-Dataset
-```
+Please refer to [VisDrone](https://github.com/VisDrone/VisDrone-Dataset) for VisDrone2019 dataset.
 
 Dataset configuration file in this repository:
 
